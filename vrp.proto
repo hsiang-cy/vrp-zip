@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+message VrpRequest {
+    repeated double distance_matrix = 1;  // 平坦化的距離矩陣
+    int32 num_locations = 2;             // 位置數量
+    int32 num_vehicles = 3;              // 車輛數量
+    int32 depot = 4;                     // 倉庫位置
+
+    repeated Location locations = 5;     // 各地點的詳細資料
+    repeated Vehicle vehicles = 6;       // 車輛的資料
+}
+
+message Location {
+    double latitude = 1;  // 經度
+    double longitude = 2; // 緯度
+    int32 cargo = 3;      // 貨物數量
+    int32 operation_time = 4; // 作業時間
+    int32 time_window_start = 5; // 時窗開始
+    int32 time_window_end = 6;   // 時窗結束
+}
+
+message Vehicle {
+    int32 capacity = 1;      // 車輛容量
+    int32 fixed_cost = 2;    // 車輛固定出車費用
+    int32 cost_per_km = 3;   // 每公里費用
+}
+
+message VrpResponse {
+    repeated Route routes = 1;           // 每輛車的路徑
+}
+
+message Route {
+    repeated int32 nodes = 1;            // 路徑中的節點
+}
+
+service VrpService {
+    rpc SolveVrp(VrpRequest) returns (VrpResponse);
+}
